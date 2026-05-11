@@ -3,67 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>物流タイピング | 日本語練習アプリ</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Business Minutes Builder | 議事録下書き作成ツール</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app-shell">
-    <section class="hero" aria-labelledby="app-title">
-      <div>
-        <p class="eyebrow">Logistics Typing Trainer</p>
-        <h1 id="app-title">物流業界向け 日本語タイピング練習</h1>
-        <p class="lead">物流全般、英語メール、物流全般英語版の長文実務ケースで、判断・確認・調整を学びながら入力スピードと正確性を磨きましょう。</p>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Rule-based Minutes Drafting Tool</p>
+      <h1>会議メモから、実務で使える議事録下書きを作成</h1>
+      <p class="lead">文字起こしや会議メモを貼り付けるだけで、意思決定・TODO・課題・期限・担当者が見えるビジネス議事録フォーマットに整理します。</p>
+    </div>
+    <div class="process-card" aria-label="2段階方式の説明">
+      <span>STEP 1</span>
+      <strong>ルールベースで下書き</strong>
+      <span>STEP 2</span>
+      <strong>必要に応じてChatGPT用プロンプト生成</strong>
+    </div>
+  </header>
+
+  <main class="app-layout">
+    <section class="panel input-panel" aria-labelledby="input-title">
+      <div class="section-heading">
+        <p class="eyebrow">Input</p>
+        <h2 id="input-title">会議情報・文字起こし</h2>
       </div>
-      <div class="rank-card" aria-live="polite">
-        <span class="rank-label">現在のランク</span>
-        <strong id="rank">-</strong>
-        <small id="rankHint">入力を開始すると判定します</small>
+
+      <form id="minutesForm" class="form-grid">
+        <label>
+          <span>会議名</span>
+          <input id="meetingName" type="text" placeholder="例：輸入案件 定例進捗会議">
+        </label>
+
+        <label>
+          <span>会議日時</span>
+          <input id="meetingDate" type="text" placeholder="例：2026/05/11 10:00-11:00">
+        </label>
+
+        <label>
+          <span>参加者</span>
+          <input id="participants" type="text" placeholder="例：田中、佐藤、ABC Logistics 山田様">
+        </label>
+
+        <label>
+          <span>クライアント名または案件名</span>
+          <input id="clientName" type="text" placeholder="例：ABC商事 輸入貨物対応">
+        </label>
+
+        <label class="full-span">
+          <span>会議目的</span>
+          <textarea id="meetingPurpose" rows="3" placeholder="例：ETA遅延に伴う納品影響と追加費用リスクの対応方針を決める"></textarea>
+        </label>
+
+        <label class="full-span">
+          <span>会議アジェンダ</span>
+          <textarea id="agenda" rows="4" placeholder="1. B/L確認&#10;2. ETA遅延状況&#10;3. Free Time延長交渉"></textarea>
+        </label>
+
+        <label class="full-span">
+          <span>会議メモ・文字起こし内容</span>
+          <textarea id="transcript" rows="12" placeholder="会議メモや文字起こしを貼り付けてください。雑談や挨拶は自動的に除外し、重要表現を抽出します。"></textarea>
+        </label>
+
+        <label class="full-span">
+          <span>重要キーワード</span>
+          <input id="keywords" type="text" placeholder="例：ETA遅延, Demurrage, Free Time, B/L, 通関">
+        </label>
+
+        <label>
+          <span>機密情報レベル</span>
+          <select id="confidentiality">
+            <option>社外秘</option>
+            <option>社内限り</option>
+            <option>一般共有可</option>
+          </select>
+        </label>
+
+        <label>
+          <span>出力トーン</span>
+          <select id="tone">
+            <option>フォーマル</option>
+            <option>簡潔</option>
+            <option>詳細</option>
+          </select>
+        </label>
+
+        <label>
+          <span>用途</span>
+          <select id="useCase">
+            <option>社内共有用</option>
+            <option>クライアント提出用</option>
+            <option>経営層報告用</option>
+          </select>
+        </label>
+      </form>
+
+      <div class="button-grid" aria-label="操作ボタン">
+        <button id="generateButton" type="button" class="primary">議事録を作成</button>
+        <button id="sampleButton" type="button">サンプル入力</button>
+        <button id="promptButton" type="button">ChatGPT貼り付け用プロンプト生成</button>
+        <button id="resetButton" type="button" class="danger">リセット</button>
       </div>
     </section>
 
-    <section class="control-panel" aria-label="練習設定">
-      <label for="categorySelect">カテゴリ</label>
-      <select id="categorySelect">
-        <option value="物流全般">物流全般</option>
-        <option value="英語メール">英語メール</option>
-        <option value="物流全般英語版">物流全般英語版</option>
-      </select>
-      <button id="nextTextButton" type="button">文章を変更</button>
-      <button id="resetButton" type="button" class="secondary">リセット</button>
-    </section>
-
-    <section class="typing-card" aria-label="タイピング練習">
-      <div class="sentence-header">
-        <span id="categoryBadge">物流全般 1/5</span>
-        <span id="progressText">0 / 0 文字</span>
+    <section class="panel output-panel" aria-labelledby="output-title">
+      <div class="section-heading output-heading">
+        <div>
+          <p class="eyebrow">Output</p>
+          <h2 id="output-title">議事録出力</h2>
+        </div>
+        <div class="output-actions">
+          <button id="copyButton" type="button">議事録をコピー</button>
+          <button id="downloadButton" type="button">テキストでダウンロード</button>
+        </div>
       </div>
-      <div id="targetText" class="target-text" aria-label="練習文章"></div>
-      <label class="input-label" for="typingInput">ここに入力してください</label>
-      <textarea id="typingInput" rows="5" placeholder="表示された文章をそのまま入力してください" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
-      <div class="completion-message" id="completionMessage" role="status" aria-live="polite"></div>
-    </section>
 
-    <section class="stats-grid" aria-label="成績">
-      <article class="stat-card">
-        <span>経過時間</span>
-        <strong id="elapsedTime">0.0秒</strong>
-      </article>
-      <article class="stat-card">
-        <span>文字数/分</span>
-        <strong id="charsPerMinute">0</strong>
-      </article>
-      <article class="stat-card">
-        <span>正答率</span>
-        <strong id="accuracy">100%</strong>
-      </article>
-      <article class="stat-card">
-        <span>ミス数</span>
-        <strong id="mistakes">0</strong>
-      </article>
-      <article class="stat-card">
-        <span>入力文字数</span>
-        <strong id="typedCount">0</strong>
-      </article>
+      <div class="notice">
+        <strong>このアプリの位置づけ：</strong>アプリ内ではルールベースで下書きを作成します。高精度な要約が必要な場合は、生成したプロンプトをChatGPTに貼り付けて仕上げてください。
+      </div>
+
+      <textarea id="output" class="minutes-output" rows="30" placeholder="「議事録を作成」を押すと、ここにWordやOutlookへ貼り付けやすい形式で議事録下書きが表示されます。"></textarea>
+      <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
     </section>
   </main>
 
