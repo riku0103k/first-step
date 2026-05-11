@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>物流タイピング | 日本語練習アプリ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero" aria-labelledby="app-title">
+      <div>
+        <p class="eyebrow">Logistics Typing Trainer</p>
+        <h1 id="app-title">物流業界向け 日本語タイピング練習</h1>
+        <p class="lead">海上輸送、B/L、港コード、危険品、英文メールの実務フレーズで、入力スピードと正確性を磨きましょう。</p>
+      </div>
+      <div class="rank-card" aria-live="polite">
+        <span class="rank-label">現在のランク</span>
+        <strong id="rank">-</strong>
+        <small id="rankHint">入力を開始すると判定します</small>
+      </div>
+    </section>
+
+    <section class="control-panel" aria-label="練習設定">
+      <label for="categorySelect">カテゴリ</label>
+      <select id="categorySelect">
+        <option value="海上輸送">海上輸送</option>
+        <option value="B/L">B/L</option>
+        <option value="港コード">港コード</option>
+        <option value="危険品">危険品</option>
+        <option value="英文メール">英文メール</option>
+      </select>
+      <button id="nextTextButton" type="button">文章を変更</button>
+      <button id="resetButton" type="button" class="secondary">リセット</button>
+    </section>
+
+    <section class="typing-card" aria-label="タイピング練習">
+      <div class="sentence-header">
+        <span id="categoryBadge">海上輸送</span>
+        <span id="progressText">0 / 0 文字</span>
+      </div>
+      <div id="targetText" class="target-text" aria-label="練習文章"></div>
+      <label class="input-label" for="typingInput">ここに入力してください</label>
+      <textarea id="typingInput" rows="5" placeholder="表示された文章をそのまま入力してください" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+      <div class="completion-message" id="completionMessage" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="stats-grid" aria-label="成績">
+      <article class="stat-card">
+        <span>経過時間</span>
+        <strong id="elapsedTime">0.0秒</strong>
+      </article>
+      <article class="stat-card">
+        <span>文字数/分</span>
+        <strong id="charsPerMinute">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>正答率</span>
+        <strong id="accuracy">100%</strong>
+      </article>
+      <article class="stat-card">
+        <span>ミス数</span>
+        <strong id="mistakes">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>入力文字数</span>
+        <strong id="typedCount">0</strong>
+      </article>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
