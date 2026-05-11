@@ -1,225 +1,320 @@
-// 練習文章データはこのファイル上部に集約しています。
-// カテゴリを増やす場合は practiceTexts にカテゴリ名を追加し、300文字以上の文章を5問以上入れてください。
-// 物流ニュースを反映する場合も、既存カテゴリの文章を差し替えるだけで画面に反映されます。
-const practiceTexts = {
-  "物流全般": [
-    "輸出案件では、営業から出荷依頼を受けた時点で、貨物内容、梱包形態、重量、容積、希望ETD、希望ETA、POL、POD、納品条件を確認します。社会人2年目の担当者であれば、依頼書をそのまま船会社へ流すだけでなく、カット日、CY Open、VGM締切、B/L Instruction締切を一覧にして、倉庫、ドレー会社、通関業者へ共有します。港混雑や運賃変動がある場合は、ONE、SITC、Evergreenなど複数船会社のスケジュールを比較し、遅延リスクと追加費用を顧客へ説明します。 また、担当者は変更理由、確認時刻、回答期限を案件メモに残し、次の担当者が同じ判断を再現できる状態にします。顧客へは費用、納期、リスク、代替案をセットで伝え、単なる連絡係ではなく調整役として行動することが求められます。",
-    "輸入コンテナでは、Arrival Noticeを受け取った後、B/LのSurrender状況、輸入申告の進捗、D/O切替、配送予約、空コンテナ返却日を同時に管理します。ETAが前倒しまたは遅延した場合、Free Timeの起算日が変わるため、DemurrageとDetentionの発生条件を再確認します。配送先の荷受人が受入日を変更できない時は、港近くの保税倉庫利用や配送日調整を検討し、船会社、フォワーダー、通関業者、ドレー会社へ同じ更新情報を送ります。 また、担当者は変更理由、確認時刻、回答期限を案件メモに残し、次の担当者が同じ判断を再現できる状態にします。顧客へは費用、納期、リスク、代替案をセットで伝え、単なる連絡係ではなく調整役として行動することが求められます。",
-    "B/L確認では、Shipper、Consignee、Notify Party、品名、個数、重量、容積、Marks、POL、POD、Place of Deliveryがインボイスやパッキングリストと一致しているかを確認します。スペルミスだけでも銀行決済、輸入通関、現地引き渡しに影響するため、ドラフトB/Lを受け取ったら顧客承認の期限を明確にします。ETD直前の訂正は船会社の訂正料や本船積み残しにつながることがあるため、変更があれば理由、承認者、送信時刻を記録し、関係者へ最新版を再送します。 また、担当者は変更理由、確認時刻、回答期限を案件メモに残し、次の担当者が同じ判断を再現できる状態にします。顧客へは費用、納期、リスク、代替案をセットで伝え、単なる連絡係ではなく調整役として行動することが求められます。",
-    "危険品輸送では、DG cargoとして船会社へ事前承認を取り、SDS、UN番号、Class、Packing Group、Proper Shipping Name、Flash Point、容器情報を確認します。普通品として見積を進めた貨物でも、塗料、接着剤、リチウム電池を含む場合は危険品に該当する可能性があります。承認が遅れるとCY搬入や本船スペースに影響するため、営業担当は顧客へ早めに資料提出を依頼し、担当者は危険品倉庫、通関業者、船会社の締切を通常貨物より前倒しで管理します。 また、担当者は変更理由、確認時刻、回答期限を案件メモに残し、次の担当者が同じ判断を再現できる状態にします。顧客へは費用、納期、リスク、代替案をセットで伝え、単なる連絡係ではなく調整役として行動することが求められます。",
-    "運賃見積では、Ocean Freightだけでなく、THC、DOC Fee、Seal Fee、CFS Charge、Drayage、通関料、保険料、Peak Season Surchargeを含めた総額で比較します。スポット運賃は市況により短期間で変動するため、見積有効期限、適用ETD、為替条件を明記します。顧客が価格を重視する場合でも、港混雑、Blank Sailing、Busan経由の積み替えリスクを説明し、納期優先なら直行便や別船会社を提案します。判断材料を整理して伝えることが実務担当者の重要な役割です。 また、担当者は変更理由、確認時刻、回答期限を案件メモに残し、次の担当者が同じ判断を再現できる状態にします。顧客へは費用、納期、リスク、代替案をセットで伝え、単なる連絡係ではなく調整役として行動することが求められます。"
-  ],
-  "英語メール": [
-    "Subject: Request for revised schedule and free time confirmation. Dear Team, we have been informed that the ETA at Nagoya may be delayed due to port congestion. Could you please confirm the latest ETD from Busan, revised ETA at Nagoya, and the applicable Free Time for this shipment? The consignee is arranging delivery with a limited receiving window, so we need to avoid Demurrage and Detention as much as possible. Please also advise whether any additional local charges will apply if the container is discharged later than planned. Thank you for your support.",
-    "Subject: Draft B/L checking for Shanghai shipment. Dear Sir or Madam, please find attached the draft B/L for the shipment from Nagoya to Shanghai. Kindly check the Shipper, Consignee, Notify Party, cargo description, package quantity, gross weight, measurement, POL, POD, and freight term carefully. If there are any corrections, please send your comments by 10:00 a.m. tomorrow, because the carrier's documentation deadline is approaching. We will proceed with final B/L issuance after receiving your approval. Your prompt confirmation would be appreciated.",
-    "Subject: DG cargo documents for carrier approval. Dear Operations Team, attached are the SDS, dangerous goods declaration, and packing details for the DG cargo scheduled to depart from Nagoya next week. Please review the UN number, Class, Packing Group, Proper Shipping Name, and emergency contact information before submitting the application to the carrier. Since DG approval may take longer than regular booking, please advise immediately if any information is missing. We also need to confirm whether transshipment via Busan is acceptable for this commodity.",
-    "Subject: Coordination request for import delivery. Dear Partner, the container under B/L number ABCD123456 is expected to arrive at Tokyo on May 18. Before arranging delivery, could you confirm whether the surrender process has been completed and whether the D/O can be released without original documents? The consignee prefers delivery on May 21, but we must check the last free day first. Please coordinate with the customs broker and trucking company, and let us know if storage, Demurrage, or Detention may occur under the current schedule.",
-    "Subject: Freight quotation follow-up. Dear Carrier Team, thank you for your quotation for the Nagoya to Shanghai shipment. Before we present it to our customer, could you clarify the validity, applicable vessel, ETD, ETA, space availability, THC, documentation fee, and any seasonal surcharge? The customer is comparing cost and lead time, so we also need to know whether a direct service is available or whether the cargo will be transshipped at Busan. If the rate may change next week, please mention the reason so that we can explain the market situation properly."
-  ],
-  "物流全般英語版": [
-    "In daily forwarding operations, a second-year logistics staff member should not only receive a shipping request but also check whether the cargo details are practical for booking. The person needs to confirm cargo description, package count, gross weight, measurement, requested ETD and ETA, POL, POD, and delivery terms. After that, the staff should compare carrier schedules, documentation deadlines, CY cut-off, VGM deadline, and trucking availability. If port congestion or a sudden freight increase may affect the plan, the customer should receive both the risk and the possible alternatives.",
-    "For import containers, schedule control begins when the arrival notice is received. The staff must check the B/L status, surrender confirmation, customs clearance progress, D/O release, delivery appointment, and empty container return plan. If ETA changes, Free Time may also change, and this can create Demurrage or Detention. A practical operator should contact the consignee, customs broker, forwarder, trucking company, and carrier with the same updated information. Clear communication prevents unnecessary storage charges and helps the consignee prepare warehouse space.",
-    "B/L checking is a small task with large consequences. The logistics staff must compare the draft B/L with the invoice, packing list, booking confirmation, and customer instruction. Shipper, Consignee, Notify Party, cargo description, marks, package quantity, gross weight, measurement, POL, POD, and freight term should match across all documents. If a correction is needed close to ETD, the carrier may charge an amendment fee or reject the change after documentation closing. Therefore, the staff should record who approved the draft, when it was approved, and which version is final.",
-    "Dangerous goods shipments require earlier coordination than general cargo. Before booking DG cargo, the operator should collect the SDS, UN number, Class, Packing Group, Proper Shipping Name, flash point, package type, and emergency contact details. Some carriers may accept the cargo on a direct service but reject it on a transshipment service via Busan or another port. If approval is delayed, the cargo may miss the CY cut-off even when the truck is ready. A careful logistics staff member confirms requirements with the carrier, warehouse, customs broker, and customer before promising the ETD.",
-    "Freight quotation work is more than copying a rate from a carrier email. The staff should compare ocean freight, THC, documentation fee, seal fee, CFS charge, drayage, customs clearance cost, insurance, and possible peak season surcharge. Spot rates can change quickly, so the quotation should show validity, applicable sailing, currency, and assumptions. When the customer asks for the cheapest option, the operator still needs to explain schedule reliability, port congestion, blank sailing risk, Free Time conditions, and the cost impact of delay. This balanced explanation supports better business decisions."
-  ]
-};
-
-const rankRules = [
-  { rank: "S", min: 180, hint: "180字/分以上。物流実務でも非常に速い入力です。" },
-  { rank: "A", min: 140, hint: "140〜179字/分。速く安定した入力です。" },
-  { rank: "B", min: 100, hint: "100〜139字/分。実務で使いやすい速度です。" },
-  { rank: "C", min: 70, hint: "70〜99字/分。正確性を保ちながら速度を上げましょう。" },
-  { rank: "D", min: 40, hint: "40〜69字/分。基礎を固めていきましょう。" },
-  { rank: "E", min: 0, hint: "39字/分以下。まずは正確な入力を意識しましょう。" }
+const noisePatterns = [
+  /お疲れ様です/g,
+  /よろしくお願いします/g,
+  /聞こえますか/g,
+  /少々お待ちください/g,
+  /画面共有/g,
+  /雑談/g,
+  /こんにちは/g,
+  /ありがとうございます/g
 ];
 
+const decisionWords = ["決定", "合意", "進める", "承認", "確定", "採用", "了承", "方針", "決める"];
+const todoWords = ["対応", "作成", "確認", "連絡", "提出", "共有", "修正", "調整", "依頼", "送付", "更新", "交渉"];
+const issueWords = ["課題", "懸念", "問題", "リスク", "未確認", "要確認", "未決", "不足", "遅延", "影響"];
+const nextWords = ["次回", "次の会議", "次回まで", "次回会議", "次回定例"];
+const highPriorityWords = ["顧客", "クライアント", "至急", "本日", "明日", "承認", "意思決定", "遅延", "リスク", "Demurrage", "デマレージ", "影響"];
+const lowPriorityWords = ["参考", "余裕", "任意", "可能であれば", "後日"];
+
 const elements = {
-  categorySelect: document.querySelector("#categorySelect"),
-  nextTextButton: document.querySelector("#nextTextButton"),
-  resetButton: document.querySelector("#resetButton"),
-  categoryBadge: document.querySelector("#categoryBadge"),
-  targetText: document.querySelector("#targetText"),
-  typingInput: document.querySelector("#typingInput"),
-  progressText: document.querySelector("#progressText"),
-  elapsedTime: document.querySelector("#elapsedTime"),
-  charsPerMinute: document.querySelector("#charsPerMinute"),
-  accuracy: document.querySelector("#accuracy"),
-  mistakes: document.querySelector("#mistakes"),
-  typedCount: document.querySelector("#typedCount"),
-  rank: document.querySelector("#rank"),
-  rankHint: document.querySelector("#rankHint"),
-  completionMessage: document.querySelector("#completionMessage")
+  meetingName: document.getElementById("meetingName"),
+  meetingDate: document.getElementById("meetingDate"),
+  participants: document.getElementById("participants"),
+  clientName: document.getElementById("clientName"),
+  meetingPurpose: document.getElementById("meetingPurpose"),
+  agenda: document.getElementById("agenda"),
+  transcript: document.getElementById("transcript"),
+  keywords: document.getElementById("keywords"),
+  confidentiality: document.getElementById("confidentiality"),
+  tone: document.getElementById("tone"),
+  useCase: document.getElementById("useCase"),
+  output: document.getElementById("output"),
+  statusMessage: document.getElementById("statusMessage"),
+  generateButton: document.getElementById("generateButton"),
+  sampleButton: document.getElementById("sampleButton"),
+  promptButton: document.getElementById("promptButton"),
+  copyButton: document.getElementById("copyButton"),
+  downloadButton: document.getElementById("downloadButton"),
+  resetButton: document.getElementById("resetButton")
 };
 
-let currentText = "";
-let currentTextIndex = 0;
-let startTime = null;
-let endTime = null;
-let timerId = null;
-
-function splitCharacters(text) {
-  return Array.from(text);
-}
-
-function escapeHtml(character) {
-  const replacements = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
+function getFormData() {
+  return {
+    meetingName: elements.meetingName.value.trim(),
+    meetingDate: elements.meetingDate.value.trim(),
+    participants: elements.participants.value.trim(),
+    clientName: elements.clientName.value.trim(),
+    meetingPurpose: elements.meetingPurpose.value.trim(),
+    agenda: elements.agenda.value.trim(),
+    transcript: elements.transcript.value.trim(),
+    keywords: elements.keywords.value.trim(),
+    confidentiality: elements.confidentiality.value,
+    tone: elements.tone.value,
+    useCase: elements.useCase.value
   };
-
-  return replacements[character] || character;
 }
 
-function getElapsedSeconds() {
-  if (!startTime) {
-    return 0;
+function setStatus(message) {
+  elements.statusMessage.textContent = message;
+  window.clearTimeout(setStatus.timer);
+  setStatus.timer = window.setTimeout(() => {
+    elements.statusMessage.textContent = "";
+  }, 3500);
+}
+
+function cleanTranscript(text) {
+  let cleaned = text.replace(/\r/g, "\n");
+  noisePatterns.forEach((pattern) => {
+    cleaned = cleaned.replace(pattern, "");
+  });
+  return cleaned
+    .split(/\n|。|．|\./)
+    .map((line) => line.replace(/^\s*[-・*\d）).:：]+\s*/, "").trim())
+    .filter((line) => line.length >= 6);
+}
+
+function includesAny(text, words) {
+  return words.some((word) => text.includes(word));
+}
+
+function uniqueItems(items, limit = 8) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const source = typeof item === "string" ? item : item.text;
+    const normalized = source.replace(/\s+/g, "").slice(0, 80);
+    if (seen.has(normalized)) {
+      return false;
+    }
+    seen.add(normalized);
+    return true;
+  }).slice(0, limit);
+}
+
+function extractAgendaItems(agendaText) {
+  const items = agendaText
+    .split(/\n|、|,/)
+    .map((item) => item.replace(/^\s*[-・*\d）).:：]+\s*/, "").trim())
+    .filter(Boolean);
+  return items.length > 0 ? items : ["会議目的・背景の確認", "主要論点の整理", "決定事項・TODOの確認"];
+}
+
+function extractAssignee(text) {
+  const patterns = [
+    /([一-龥ぁ-んァ-ヶA-Za-z0-9]{1,16}(?:さん|様|氏|部|課|チーム|担当|会社|業者))/,
+    /担当[:：は\s]*([一-龥ぁ-んァ-ヶA-Za-z0-9]+(?:さん|様|氏|部|課|チーム)?)/
+  ];
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      const candidate = match[1].replace(/^担当[:：は\s]*/, "");
+      if (!/[のにをがへで]/.test(candidate)) {
+        return candidate;
+      }
+    }
   }
-
-  const finish = endTime || Date.now();
-  return Math.max((finish - startTime) / 1000, 0);
+  return "要確認";
 }
 
-function calculateStats(input) {
-  const targetChars = splitCharacters(currentText);
-  const inputChars = splitCharacters(input);
-  let correctCount = 0;
-  let mistakes = 0;
+function extractDueDate(text) {
+  const match = text.match(/(本日中|明日|明後日|今週中|来週中|来週|月末|週明け|\d{1,2}[\/月]\d{1,2}日?|\d{1,2}日まで|\d{1,2}営業日以内)/);
+  return match ? match[1] : "要確認";
+}
 
-  inputChars.forEach((character, index) => {
-    if (character === targetChars[index]) {
-      correctCount += 1;
-    } else {
-      mistakes += 1;
+function classifyPriority(text, dueDate) {
+  if (includesAny(text, highPriorityWords) || ["本日中", "明日", "明後日", "今週中"].includes(dueDate)) {
+    return "高";
+  }
+  if (includesAny(text, lowPriorityWords)) {
+    return "低";
+  }
+  return "中";
+}
+
+function toBulletLines(items, fallback, limit = 6) {
+  const selected = uniqueItems(items, limit);
+  if (selected.length === 0) {
+    return `・${fallback}`;
+  }
+  return selected.map((item) => `・${summarizeLine(item)}`).join("\n");
+}
+
+function summarizeLine(text) {
+  return text
+    .replace(/えー|あの|その|ちょっと|まあ|一応/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+}
+
+function buildExecutiveSummary(data, extracted) {
+  const summary = [];
+  if (data.meetingPurpose) {
+    summary.push(`本会議は、${data.meetingPurpose}ことを目的に実施した。`);
+  } else {
+    summary.push("本会議では、入力メモに基づき主要論点、決定事項、TODOを整理した。");
+  }
+  if (extracted.decisions.length > 0) {
+    summary.push(`主な決定事項は「${summarizeLine(extracted.decisions[0])}」。`);
+  }
+  if (extracted.todos.length > 0) {
+    const topTodo = extracted.todos[0];
+    summary.push(`次アクションは「${summarizeLine(topTodo.text)}」で、担当者は${topTodo.assignee}、期限は${topTodo.dueDate}。`);
+  }
+  if (extracted.issues.length > 0) {
+    summary.push(`継続課題として「${summarizeLine(extracted.issues[0])}」の確認が必要。`);
+  }
+  if (data.useCase === "経営層報告用") {
+    summary.push("経営判断に必要なリスク、顧客影響、期限超過の有無を優先して確認する。");
+  }
+  return summary.slice(0, 5).map((item) => `・${item}`).join("\n");
+}
+
+function extractMeetingInsights(data) {
+  const lines = cleanTranscript(data.transcript);
+  const decisions = [];
+  const issues = [];
+  const nextActions = [];
+  const todos = [];
+
+  lines.forEach((line) => {
+    if (includesAny(line, decisionWords)) {
+      decisions.push(line);
+    }
+    if (includesAny(line, issueWords)) {
+      issues.push(line);
+    }
+    if (includesAny(line, nextWords)) {
+      nextActions.push(line);
+    }
+    if (includesAny(line, todoWords)) {
+      const dueDate = extractDueDate(line);
+      todos.push({
+        text: line,
+        assignee: extractAssignee(line),
+        dueDate,
+        priority: classifyPriority(line, dueDate)
+      });
     }
   });
 
-  const elapsedSeconds = getElapsedSeconds();
-  const minutes = elapsedSeconds / 60;
-  const charsPerMinute = minutes > 0 ? Math.round(correctCount / minutes) : 0;
-  const accuracy = inputChars.length > 0 ? Math.round((correctCount / inputChars.length) * 100) : 100;
-
   return {
-    inputLength: inputChars.length,
-    correctCount,
-    mistakes,
-    elapsedSeconds,
-    charsPerMinute,
-    accuracy
+    lines,
+    decisions: uniqueItems(decisions, 8),
+    issues: uniqueItems(issues, 8),
+    nextActions: uniqueItems(nextActions, 5),
+    todos: uniqueItems(todos, 8)
   };
 }
 
-function getRank(charsPerMinute) {
-  return rankRules.find((rule) => charsPerMinute >= rule.min) || rankRules[rankRules.length - 1];
+function buildDiscussionSummary(agendaItems, extracted) {
+  return agendaItems.slice(0, 4).map((agenda, index) => {
+    const related = extracted.lines.filter((line) => line.includes(agenda) || agenda.split(/\s|・|\/|／/).some((word) => word.length > 2 && line.includes(word))).slice(0, 2);
+    const opinions = related.length > 0 ? related.map((line) => `・主な意見：${summarizeLine(line)}`).join("\n") : "・主な意見：関連する発言は要確認。";
+    const conclusion = extracted.decisions.find((line) => related.includes(line)) || extracted.decisions[index] || "結論は要確認。";
+    return `【議題${index + 1}】${agenda}\n・論点：${agenda}に関する現状、影響、対応方針を整理。\n${opinions}\n・結論：${summarizeLine(conclusion)}`;
+  }).join("\n\n");
 }
 
-function renderTargetText(input = "") {
-  const targetChars = splitCharacters(currentText);
-  const inputChars = splitCharacters(input);
-
-  elements.targetText.innerHTML = targetChars.map((character, index) => {
-    let className = "char-pending";
-
-    if (index < inputChars.length) {
-      className = inputChars[index] === character ? "char-correct" : "char-wrong";
-    }
-
-    return `<span class="${className}">${escapeHtml(character)}</span>`;
-  }).join("");
+function buildTodoTable(todos) {
+  const rows = todos.length > 0 ? todos : [{ text: "追加対応事項を確認する", assignee: "要確認", dueDate: "要確認", priority: "中" }];
+  return [
+    "| No | タスク内容 | 担当者 | 期限 | 優先度 | 補足 |",
+    "| -- | ----- | --- | -- | --- | -- |",
+    ...rows.map((todo, index) => `| ${index + 1} | ${summarizeLine(todo.text)} | ${todo.assignee} | ${todo.dueDate} | ${todo.priority} | 根拠：会議メモより抽出 |`)
+  ].join("\n");
 }
 
-function renderStats(input = "") {
-  const stats = calculateStats(input);
-  const rank = startTime ? getRank(stats.charsPerMinute) : { rank: "-", hint: "入力を開始すると判定します" };
-  const targetLength = splitCharacters(currentText).length;
-
-  elements.elapsedTime.textContent = `${stats.elapsedSeconds.toFixed(1)}秒`;
-  elements.charsPerMinute.textContent = String(stats.charsPerMinute);
-  elements.accuracy.textContent = `${stats.accuracy}%`;
-  elements.mistakes.textContent = String(stats.mistakes);
-  elements.typedCount.textContent = String(stats.inputLength);
-  elements.progressText.textContent = `${Math.min(stats.inputLength, targetLength)} / ${targetLength} 文字`;
-  elements.rank.textContent = rank.rank;
-  elements.rankHint.textContent = rank.hint;
+function buildConfirmationItems(data, extracted) {
+  const confirmations = [];
+  if (!data.meetingDate) confirmations.push("会議日時が未入力のため確認する。");
+  if (!data.participants) confirmations.push("参加者および各社の役割を確認する。");
+  if (extracted.todos.some((todo) => todo.assignee === "要確認")) confirmations.push("TODOの担当者が未特定の項目を確認する。");
+  if (extracted.todos.some((todo) => todo.dueDate === "要確認")) confirmations.push("TODOの期限が未特定の項目を確認する。");
+  if (extracted.decisions.length === 0) confirmations.push("明確な決定事項が読み取れないため、合意内容を確認する。");
+  if (extracted.issues.length === 0) confirmations.push("未決事項・課題がないか関係者へ確認する。");
+  return toBulletLines(confirmations, "追加確認事項なし。ただし、提出前に担当者・期限・社外共有可否を再確認する。", 8);
 }
 
-function stopTimer() {
-  if (timerId) {
-    clearInterval(timerId);
-    timerId = null;
-  }
+function generateMinutes() {
+  const data = getFormData();
+  const extracted = extractMeetingInsights(data);
+  const agendaItems = extractAgendaItems(data.agenda);
+  const agendaList = agendaItems.map((item, index) => `${index + 1}. ${item}`).join("\n");
+  const keywordText = data.keywords ? `重要キーワード：${data.keywords}` : "重要キーワード：未入力";
+  const toneNote = `出力トーン：${data.tone}／用途：${data.useCase}`;
+
+  const minutes = `【会議議事録】\n\n■エグゼクティブサマリー\n${buildExecutiveSummary(data, extracted)}\n\n■会議概要\n・会議名：${data.meetingName || "要確認"}\n・日時：${data.meetingDate || "要確認"}\n・参加者：${data.participants || "要確認"}\n・クライアント名／案件名：${data.clientName || "要確認"}\n・目的：${data.meetingPurpose || "要確認"}\n・機密情報レベル：${data.confidentiality}\n\n■アジェンダ\n${agendaList}\n\n■議論内容サマリー\n${buildDiscussionSummary(agendaItems, extracted)}\n\n■決定事項\n${toBulletLines(extracted.decisions, "明確な決定事項は入力内容から抽出できないため、会議主催者へ確認する。", 6)}\n\n■未決事項・課題\n${toBulletLines(extracted.issues, "未決事項・課題は入力内容から抽出できないため、関係者へ確認する。", 6)}\n\n■TODO一覧\n\n${buildTodoTable(extracted.todos)}\n\n■次回会議までのアクション\n${toBulletLines(extracted.nextActions, "次回会議までの具体アクションは要確認。", 5)}\n\n■要確認事項\n${buildConfirmationItems(data, extracted)}\n\n■補足事項\n・${keywordText}\n・${toneNote}\n・本議事録はルールベース抽出による下書きであり、社外共有前に事実関係、担当者、期限、機密情報の記載範囲を確認する。`;
+
+  elements.output.value = minutes;
+  setStatus("議事録下書きを作成しました。");
 }
 
-function startTimer() {
-  if (startTime) {
+function generatePrompt() {
+  const data = getFormData();
+  const prompt = `あなたは外資系コンサルティングファーム出身のPM兼ビジネスアナリストです。以下の会議情報と文字起こしをもとに、A4 1〜2枚程度で読める実務レベルの議事録を作成してください。\n\n# 重要指示\n- 単なる文字起こしの羅列ではなく、ビジネス上重要な情報のみ整理・要約する\n- 決定事項、TODO、未決事項、期限、担当者、目的・背景を明確化する\n- 「誰が・何を・いつまでに・なぜ行うか」が分かるようにする\n- 不明点は要確認事項として分離する\n- 雑談、挨拶、オンライン会議特有のノイズは除外する\n- 文体は${data.tone}、用途は${data.useCase}を想定する\n- 機密情報レベルは「${data.confidentiality}」。不要な繰り返しは避ける\n\n# 出力フォーマット\n【会議議事録】\n■エグゼクティブサマリー\n■会議概要\n■アジェンダ\n■議論内容サマリー\n■決定事項\n■未決事項・課題\n■TODO一覧（No、タスク内容、担当者、期限、優先度、補足の表）\n■次回会議までのアクション\n■要確認事項\n■補足事項\n\n# 会議情報\n- 会議名：${data.meetingName || "未入力"}\n- 会議日時：${data.meetingDate || "未入力"}\n- 参加者：${data.participants || "未入力"}\n- クライアント名／案件名：${data.clientName || "未入力"}\n- 会議目的：${data.meetingPurpose || "未入力"}\n- 会議アジェンダ：\n${data.agenda || "未入力"}\n- 重要キーワード：${data.keywords || "未入力"}\n\n# 会議メモ・文字起こし\n${data.transcript || "未入力"}`;
+
+  elements.output.value = prompt;
+  setStatus("ChatGPT貼り付け用プロンプトを生成しました。");
+}
+
+function fillSample() {
+  elements.meetingName.value = "輸入コンテナ ETA遅延・費用リスク対応会議";
+  elements.meetingDate.value = "2026/05/11 10:00-11:00";
+  elements.participants.value = "ABC商事 田中様、物流部 佐藤さん、通関業者 山本さん、倉庫担当 鈴木さん、当社PM 加藤";
+  elements.clientName.value = "ABC商事 アジア発輸入案件";
+  elements.meetingPurpose.value = "ETA遅延に伴う納品影響、Free Time延長交渉、Demurrage発生リスクへの対応方針を決定する";
+  elements.agenda.value = "1. B/L記載内容の確認\n2. 本船ETA遅延状況と納品影響\n3. Free Time延長交渉方針\n4. 通関業者・倉庫との調整事項\n5. 次回会議までのTODO確認";
+  elements.keywords.value = "B/L, ETA遅延, Free Time, Demurrage, 通関, 倉庫調整, 船会社";
+  elements.confidentiality.value = "社外秘";
+  elements.tone.value = "フォーマル";
+  elements.useCase.value = "クライアント提出用";
+  elements.transcript.value = "B/LのConsignee表記はABC商事で確定。Notify Partyの住所に一部旧住所が残っているため、船会社へ修正依頼することで合意。佐藤さんが本日中に船会社へ連絡し、修正後ドラフトを共有する。\n本船ETAは5/15予定から5/18へ遅延。倉庫の搬入枠に影響があるため、鈴木さんが明日までに倉庫へ再調整を依頼する。顧客納品が5/20指定のため、遅延リスクは高い。\nFree Timeは標準7日だが、ETA遅延によりDemurrage発生リスクがある。山本さんが今週中に船会社へFree Time延長交渉を行う。延長可否が未確認のため課題として残す。\n通関書類はPacking Listの重量欄に差異がある問題を確認。ABC商事 田中様が来週までに仕入先へ修正版を依頼する。\n次回までに、B/L修正版、Free Time延長可否、倉庫搬入枠、通関書類差異の解消状況を共有する。次回会議は5/14に実施する方向で進める。";
+  setStatus("物流業界のサンプルを入力しました。");
+}
+
+async function copyOutput() {
+  if (!elements.output.value.trim()) {
+    setStatus("コピーする議事録がありません。");
     return;
   }
-
-  startTime = Date.now();
-  timerId = setInterval(() => renderStats(elements.typingInput.value), 100);
-}
-
-function isCompleted(input) {
-  return input === currentText;
-}
-
-function handleInput() {
-  const input = elements.typingInput.value;
-
-  if (input.length > 0) {
-    startTimer();
+  try {
+    await navigator.clipboard.writeText(elements.output.value);
+    setStatus("クリップボードにコピーしました。");
+  } catch (error) {
+    elements.output.select();
+    document.execCommand("copy");
+    setStatus("クリップボードにコピーしました。");
   }
+}
 
-  if (isCompleted(input) && !endTime) {
-    endTime = Date.now();
-    stopTimer();
-    const stats = calculateStats(input);
-    const rank = getRank(stats.charsPerMinute);
-    elements.completionMessage.textContent = `完了しました。時間: ${stats.elapsedSeconds.toFixed(1)}秒 / 速度: ${stats.charsPerMinute}字/分 / 正答率: ${stats.accuracy}% / ランク: ${rank.rank}`;
-  } else if (!isCompleted(input)) {
-    endTime = null;
-    elements.completionMessage.textContent = "";
-    if (startTime && !timerId) {
-      timerId = setInterval(() => renderStats(elements.typingInput.value), 100);
-    }
+function downloadOutput() {
+  if (!elements.output.value.trim()) {
+    setStatus("ダウンロードする議事録がありません。");
+    return;
   }
-
-  renderTargetText(input);
-  renderStats(input);
+  const data = getFormData();
+  const blob = new Blob([elements.output.value], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  const safeName = (data.meetingName || "meeting-minutes").replace(/[\\/:*?"<>|\s]+/g, "-");
+  anchor.href = url;
+  anchor.download = `${safeName}.txt`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+  setStatus("テキストファイルをダウンロードしました。");
 }
 
-function setText(category, direction = 0) {
-  const texts = practiceTexts[category];
-  currentTextIndex = (currentTextIndex + direction + texts.length) % texts.length;
-  currentText = texts[currentTextIndex];
-  elements.categoryBadge.textContent = `${category} ${currentTextIndex + 1}/${texts.length}`;
-  resetPractice();
+function resetAll() {
+  document.getElementById("minutesForm").reset();
+  elements.output.value = "";
+  setStatus("入力内容と出力内容をクリアしました。");
 }
 
-function resetPractice() {
-  stopTimer();
-  startTime = null;
-  endTime = null;
-  elements.typingInput.value = "";
-  elements.completionMessage.textContent = "";
-  renderTargetText();
-  renderStats();
-  elements.typingInput.focus();
-}
-
-elements.categorySelect.addEventListener("change", (event) => {
-  currentTextIndex = 0;
-  setText(event.target.value);
-});
-
-elements.nextTextButton.addEventListener("click", () => {
-  setText(elements.categorySelect.value, 1);
-});
-
-elements.resetButton.addEventListener("click", resetPractice);
-elements.typingInput.addEventListener("input", handleInput);
-
-setText(elements.categorySelect.value);
+elements.generateButton.addEventListener("click", generateMinutes);
+elements.sampleButton.addEventListener("click", fillSample);
+elements.promptButton.addEventListener("click", generatePrompt);
+elements.copyButton.addEventListener("click", copyOutput);
+elements.downloadButton.addEventListener("click", downloadOutput);
+elements.resetButton.addEventListener("click", resetAll);
